@@ -1,0 +1,15 @@
+[user]
+	name = GF47
+	email = liougourenmo@gmail.com
+[core]
+	editor = gvim
+	quotepath = off
+	autocrlf = input
+	excludesfile = C:\\Users\\Administrator\\Documents\\gitignore_global.txt
+[merge]
+	tool = gvimdiff
+[i18n]
+[gui]
+    encoding = utf-8
+    commitencoding = utf-8
+	recentrepo = D:/Work/Unity_5_x_Project/UnityResourcesManager
