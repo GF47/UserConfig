@@ -63,6 +63,7 @@ set wildmenu
 
 "Encoding related
 set encoding=utf-8
+set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
 set langmenu=zh_CN.UTF-8
 language message zh_CN.UTF-8
 
