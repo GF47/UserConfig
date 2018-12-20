@@ -143,6 +143,7 @@ Plugin 'vim-scripts/winmanager'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
+Plugin 'othree/xml.vim'
 " 添加需要加载的插件↑
 
 call vundle#end()            " required

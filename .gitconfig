@@ -5,7 +5,7 @@
 	editor = gvim
 	quotepath = off
 	autocrlf = input
-	excludesfile = C:\\Users\\Administrator\\Documents\\gitignore_global.txt
+	excludesfile = 
 [merge]
 	tool = gvimdiff
 [i18n]
@@ -13,3 +13,10 @@
     encoding = utf-8
     commitencoding = utf-8
 	recentrepo = D:/Work/Unity_5_x_Project/UnityResourcesManager
+[winUpdater]
+	recentlySeenVersion = 2.19.1.windows.1
+[difftool "sourcetree"]
+	cmd = '' \"$LOCAL\" \"$REMOTE\"
+[mergetool "sourcetree"]
+	cmd = "'' "
+	trustExitCode = true
