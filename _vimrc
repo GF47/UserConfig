@@ -25,8 +25,6 @@ set mousemodel=popup
 set keymodel=
 set selection=inclusive
 
-" 将kj映射为esc
-inoremap kj <ESC>
 
 "--------------------------------------------------------------"
 " 查找和匹配
@@ -76,7 +74,7 @@ set termencoding=utf-8
 set ffs=unix,dos,mac
 
 nmap <leader>fu :set ff=unix<cr>
-nmap <leader>fd :set ff=dox<cr>
+nmap <leader>fd :set ff=dos<cr>
 nmap <leader>fm :set ff=mac<cr>
 
 
@@ -121,6 +119,8 @@ source $VIMRUNTIME/menu.vim
 set number! "nu
 " 底部显示状态栏标尺
 set ruler "ru
+" 设置命令行高度
+set cmdheight=2
 " 不显示空白字符
 set nolist
 " 行列字符数
@@ -206,7 +206,7 @@ function AddTitle()
     call append(6," **************************************************************/")
 endfunction
 
-nmap <leader>cs :call AddTitle()<cr> 's
+nmap <leader>cg :call AddTitle()<cr> 's
 
 
 "--------------------------------------------------------------"
@@ -234,6 +234,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'othree/xml.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'leafgarland/typescript-vim'
 " 添加需要加载的插件↑
 
 call vundle#end()            " required
@@ -295,6 +296,9 @@ let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 "   let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"', '`':'`', '<':'>'}
 " end
 
+" nerdcommenter
+let g:NERDSpaceDelims=1
+
 " YouCompleteMe
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_show_diagnostics_ui = 0
@@ -303,9 +307,26 @@ let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
 let g:ycm_key_invoke_completion = '<c-z>'
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_disable_for_files_larger_than_kb = 1000
 set completeopt=menu,menuone
 
 let g:ycm_semantic_triggers =  {
            \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
            \ 'cs,lua,javascript': ['re!\w{2}'],
            \ }
+
+" let g:ycm_filetype_whitelist = {
+    " \ "c":1,
+    " \ "cpp":1,
+    " \ "objc":1,
+    " \ "objcpp":1,
+    " \ "cuda":1,
+    " \ "cs":1,
+    " \ "python":1,
+    " \ "lua":1,
+    " \ "go":1,
+    " \ "java":1,
+    " \ "javascript":1,
+    " \ "typescript":1,
+    " \}
