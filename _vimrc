@@ -224,6 +224,7 @@ call vundle#begin('$HOME/.vim/bundle/')
 Plugin 'VundleVim/Vundle.vim'
 
 " 添加需要加载的插件↓
+Plugin 'leafgarland/typescript-vim'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'vim-scripts/taglist.vim'
 Plugin 'scrooloose/nerdtree'
@@ -234,7 +235,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'othree/xml.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'leafgarland/typescript-vim'
+Plugin 'iamcco/dict.vim'
 " 添加需要加载的插件↑
 
 call vundle#end()            " required
@@ -300,14 +301,24 @@ let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 let g:NERDSpaceDelims=1
 
 " YouCompleteMe
+" 停止提示是否加载本目录下的ycm_extra_conf文件
+let g:ycm_confirm_extra_conf = 0
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_server_log_level = 'info'
+" 第二个字符触发补全
 let g:ycm_min_num_identifier_candidate_chars = 2
+" 在字符串和注释中的文字也会被收入补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" 字符串中使用补全
 let g:ycm_complete_in_strings=1
+" 注释中使用补全
+let g:ycm_complete_in_comments = 1
+" Ctrl+Z调出补全
 let g:ycm_key_invoke_completion = '<c-z>'
+" 语法关键字补全
 let g:ycm_seed_identifiers_with_syntax = 1
+" 大于1kb的文件不使用补全
 let g:ycm_disable_for_files_larger_than_kb = 1000
 set completeopt=menu,menuone
 
@@ -330,3 +341,11 @@ let g:ycm_semantic_triggers =  {
     " \ "javascript":1,
     " \ "typescript":1,
     " \}
+
+
+" dict.vim
+let g:api_key = "1932136763"
+let g:keyfrom = "aioiyuuko"
+
+nmap <silent> <leader><leader>w <Plug>DictWSearch
+vmap <silent> <leader><leader>w <Plug>DictWVSearch
