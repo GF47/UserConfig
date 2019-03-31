@@ -2,12 +2,12 @@
 	name = GF47
 	email = liougourenmo@gmail.com
 [core]
-	editor = gvim
+	editor = vim
 	quotepath = off
 	autocrlf = input
 	excludesfile = 
 [merge]
-	tool = gvimdiff
+	tool = vimdiff
 [i18n]
 [gui]
     encoding = utf-8
