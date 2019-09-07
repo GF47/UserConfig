@@ -106,6 +106,17 @@ set smarttab "st
 syntax enable
 syntax on
 
+function SetTab2()
+    set shiftwidth=2
+    set tabstop=2
+    set softtabstop=2
+endfunction
+
+function SetTab4()
+    set shiftwidth=4
+    set tabstop=4
+    set softtabstop=4
+endfunction
 
 "--------------------------------------------------------------"
 " GUI
@@ -236,6 +247,7 @@ Plugin 'othree/xml.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'iamcco/dict.vim'
+Plugin 'vim-scripts/DrawIt'
 " 添加需要加载的插件↑
 
 call vundle#end()            " required
