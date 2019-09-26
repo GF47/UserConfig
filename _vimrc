@@ -63,7 +63,6 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8,gb2312,gb18030,gbk,ucs-bom,cp936,latin1
 set langmenu=zh_CN.UTF-8
-" let $LANG='en_US.UTF-8'
 language message zh_CN.UTF-8
 if version >= 603
     set helplang=cn
@@ -126,16 +125,28 @@ endfunction
 autocmd GUIEnter * set shortmess=atI
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
+
+set laststatus=2
+set t_Co=256
 " 显示行号
 set number! "nu
 " 底部显示状态栏标尺
 set ruler "ru
+set statusline=                   " 清空状态栏
+set statusline+=\ %F              " 文件名
+set statusline+=\ [%1*%M%*%n%R%H] " buffer 编号 状态
+set statusline+=%=                " 右对齐
+set statusline+=\ %y              " 文件类型
+" 最右边显示文件编码和行号等信息
+set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
 " 设置命令行高度
 set cmdheight=2
+" 允许下方显示目录
+set wildmenu
 " 不显示空白字符
 set nolist
 " 行列字符数
-set lines=24 columns=118
+" set lines=24 columns=118
 " 行间距
 set linespace=8
 " 不在单词中间断行
@@ -143,7 +154,7 @@ set lbr
 " Unicode中双字节字符宽度
 set ambiwidth=double
 " 亚洲字符断行，m为允许在两个汉字之间断行，B为将两行合并时，汉字之间不需要补空格
-set fo+=mB
+set formatoptions+=mB
 " 带以下符号的单词不要被换行分割
 set iskeyword+=_,$,@,%,#,-
 " 启动时关闭折叠
@@ -168,6 +179,23 @@ else
 	colo ron
 	set wrap
 endif
+
+
+hi! clear SpellBad
+hi! clear SpellCap
+hi! clear SpellRare
+hi! clear SpellLocal
+if has('gui_running')
+    hi! SpellBad gui=undercurl guisp=red
+    hi! SpellCap gui=undercurl guisp=blue
+    hi! SpellRare gui=undercurl guisp=magenta
+    hi! SpellRare gui=undercurl guisp=cyan
+else
+    hi! SpellBad term=standout ctermfg=1 term=underline cterm=underline
+    hi! SpellCap term=underline cterm=underline
+    hi! SpellRare term=underline cterm=underline
+    hi! SpellLocal term=underline cterm=underline
+endif
 " 配色
 hi Folded term=standout ctermfg=darkcyan ctermbg=NONE guifg=Black guibg=#e3c1a5
 " 弹窗配色
@@ -176,19 +204,17 @@ hi PMenuSel ctermfg=242 ctermbg=8 guifg=darkgrey guibg=black
 " 禁止光标闪烁
 " set gcr=a:block-blinkon0
 " 显示光标所在的行
-set cursorline "cul
 if has("gui_running")
+    set cursorline "cul
     hi cursorline guibg=#001420
     hi CursorColumn guibg=#001420
 endif
 " 字体
-if (has("win32") || has("win64"))
-	if(has("gui_running"))
-		set guifont=Consolas:h12:cANSI
-	endif
-else
-	if(has("gui_running"))
-		set guifont=Bitstream\ Vera\ Sans\ Mono\ 9
+if (has("gui_running"))
+    if (has("win32")) || (has("win64"))
+        set guifont=Consolas:h12:cANSI
+    else
+        set guifont=DejaVu\ Sans\ Mono\ 10
 	endif
 endif
 
@@ -201,6 +227,10 @@ set noerrorbells "noeb
 set novisualbell
 set t_vb=
 
+"--------------------------------------------------------------"
+" ctags
+"--------------------------------------------------------------"
+set tags=./.tags;,.tags
 
 "--------------------------------------------------------------"
 " 自定义的一些方法
@@ -221,52 +251,55 @@ nmap <leader>cg :call AddTitle()<cr> 's
 
 
 "--------------------------------------------------------------"
-" Vundle
+" vim-plug
 "--------------------------------------------------------------"
 
-"vundle start
-set nocompatible " be iMproved, required
-filetype off                  " required
-
-" 将Vundle插件的目录添加到gvim的运行时变量中
-set rtp+=$HOME/.vim/bundle/Vundle.vim/
-call vundle#begin('$HOME/.vim/bundle/')
-" All of your Plugins must be added before the following line
-Plugin 'VundleVim/Vundle.vim'
-
+call plug#begin(expand('$HOME/.vim/vim-plug/bundle'))
 " 添加需要加载的插件↓
-Plugin 'leafgarland/typescript-vim'
-Plugin 'Lokaltog/vim-powerline'
-Plugin 'vim-scripts/taglist.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'vim-scripts/winmanager'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'tpope/vim-surround'
-Plugin 'othree/xml.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'iamcco/dict.vim'
-Plugin 'vim-scripts/DrawIt'
+Plug 'leafgarland/typescript-vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-scripts/taglist.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-scripts/winmanager'
+Plug 'junegunn/vim-easy-align'
+Plug 'jiangmiao/auto-pairs'
+Plug 'tpope/vim-surround'
+Plug 'mhinz/vim-signify'
+Plug 'othree/xml.vim'
+Plug 'scrooloose/nerdcommenter'
+" Plug 'Valloric/YouCompleteMe'
+Plug 'iamcco/dict.vim'
+Plug 'vim-scripts/DrawIt'
 " 添加需要加载的插件↑
 
-call vundle#end()            " required
-filetype plugin indent on    " required
-"vundle end
+call plug#end()
 
 
 "--------------------------------------------------------------"
 " 插件配置
 "--------------------------------------------------------------"
 
-" PowerLine
-set laststatus=2
-set t_Co=256
-let g:PowerLine_symbols='fancy'
-set encoding=utf-8
+" airline
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_powerline_fonts = 0
+let g:airline_exclude_preview = 1
+let g:airline_section_b = '%n'
+let g:airline_theme='deus'
+let g:airline#extensions#branch#enabled = 0
+let g:airline#extensions#syntastic#enabled = 0
+let g:airline#extensions#fugitiveline#enabled = 0
+let g:airline#extensions#csv#enabled = 0
+let g:airline#extensions#vimagit#enabled = 0
+
 
 " TagList & NERDTree
-let Tlist_Ctags_Cmd = '"D:\GF47_Program_Files\ctags\ctags.exe"'
+if (has("win32")) || (has("win64"))
+    let Tlist_Ctags_Cmd = '"D:\GF47_Program_Files\ctags\ctags.exe"'
+endif
 let Tlist_Show_One_File = 1
 let Tlist_Exit_OnlyWindow = 1
 let Tlist_File_Fold_Auto_Close = 1
@@ -312,47 +345,47 @@ let g:easy_align_delimiters['#'] = {'pattern': '#', 'ignore_groups': ['String']}
 " nerdcommenter
 let g:NERDSpaceDelims=1
 
-" YouCompleteMe
-" 停止提示是否加载本目录下的ycm_extra_conf文件
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_show_diagnostics_ui = 0
-let g:ycm_server_log_level = 'info'
-" 第二个字符触发补全
-let g:ycm_min_num_identifier_candidate_chars = 2
-" 在字符串和注释中的文字也会被收入补全
-let g:ycm_collect_identifiers_from_comments_and_strings = 1
-" 字符串中使用补全
-let g:ycm_complete_in_strings=1
-" 注释中使用补全
-let g:ycm_complete_in_comments = 1
-" Ctrl+Z调出补全
-let g:ycm_key_invoke_completion = '<c-z>'
-" 语法关键字补全
-let g:ycm_seed_identifiers_with_syntax = 1
-" 大于1kb的文件不使用补全
-let g:ycm_disable_for_files_larger_than_kb = 1000
-set completeopt=menu,menuone
-
-let g:ycm_semantic_triggers =  {
-           \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-           \ 'cs,lua,javascript': ['re!\w{2}'],
-           \ }
-
-" let g:ycm_filetype_whitelist = {
-    " \ "c":1,
-    " \ "cpp":1,
-    " \ "objc":1,
-    " \ "objcpp":1,
-    " \ "cuda":1,
-    " \ "cs":1,
-    " \ "python":1,
-    " \ "lua":1,
-    " \ "go":1,
-    " \ "java":1,
-    " \ "javascript":1,
-    " \ "typescript":1,
-    " \}
+" " YouCompleteMe
+" " 停止提示是否加载本目录下的ycm_extra_conf文件
+" let g:ycm_confirm_extra_conf = 0
+" let g:ycm_add_preview_to_completeopt = 0
+" let g:ycm_show_diagnostics_ui = 0
+" let g:ycm_server_log_level = 'info'
+" " 第二个字符触发补全
+" let g:ycm_min_num_identifier_candidate_chars = 2
+" " 在字符串和注释中的文字也会被收入补全
+" let g:ycm_collect_identifiers_from_comments_and_strings = 1
+" " 字符串中使用补全
+" let g:ycm_complete_in_strings=1
+" " 注释中使用补全
+" let g:ycm_complete_in_comments = 1
+" " Ctrl+Z调出补全
+" let g:ycm_key_invoke_completion = '<c-z>'
+" " 语法关键字补全
+" let g:ycm_seed_identifiers_with_syntax = 1
+" " 大于1kb的文件不使用补全
+" let g:ycm_disable_for_files_larger_than_kb = 1000
+" set completeopt=menu,menuone
+" 
+" let g:ycm_semantic_triggers =  {
+"            \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+"            \ 'cs,lua,javascript': ['re!\w{2}'],
+"            \ }
+" 
+" " let g:ycm_filetype_whitelist = {
+"     " \ "c":1,
+"     " \ "cpp":1,
+"     " \ "objc":1,
+"     " \ "objcpp":1,
+"     " \ "cuda":1,
+"     " \ "cs":1,
+"     " \ "python":1,
+"     " \ "lua":1,
+"     " \ "go":1,
+"     " \ "java":1,
+"     " \ "javascript":1,
+"     " \ "typescript":1,
+"     " \}
 
 
 " dict.vim
