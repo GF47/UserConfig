@@ -14,7 +14,7 @@ set whichwrap+=<,>,h,l
 set backspace=indent,eol,start
 " 光标移动到底部或顶部保持指定距离
 set scrolloff=2
-" 自身命令行模式智能补全
+" 允许下方显示目录
 set wildmenu
 " 取消alt键呼出菜单的功能
 set winaltkeys=no
@@ -141,8 +141,6 @@ set statusline+=\ %y              " 文件类型
 set statusline+=\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %v:%l/%L%)
 " 设置命令行高度
 set cmdheight=2
-" 允许下方显示目录
-set wildmenu
 " 不显示空白字符
 set nolist
 " 行列字符数
@@ -210,8 +208,8 @@ if has("gui_running")
     hi CursorColumn guibg=#001420
 endif
 " 字体
-if (has("gui_running"))
-    if (has("win32")) || (has("win64"))
+if has("gui_running")
+    if has("win32") || has("win64")
         set guifont=Consolas:h12:cANSI
     else
         set guifont=DejaVu\ Sans\ Mono\ 10
@@ -252,6 +250,18 @@ nmap <leader>cg :call AddTitle()<cr> 's
 
 "--------------------------------------------------------------"
 " vim-plug
+"
+" 说明：
+" 1.保证windows下的git和mingw可以正确加载插件
+"   以及linux下可以正确加载
+"   在`.vim`文件夹中新建`autoload`文件夹
+"   将`plug.vim`拷贝进去
+" 2.仅限windows下的gvim和其命令行版
+"   在`.vim`文件夹外新建`vimfiles\autoload`文件夹
+"   将`plug.vim`拷贝进去
+"
+" 所以在windows下，其实是有两个`plug.vim`文件的
+" 只不过gvim和git自带的vim加载的不是一个而已
 "--------------------------------------------------------------"
 
 call plug#begin(expand('$HOME/.vim/vim-plug/bundle'))
@@ -297,9 +307,13 @@ let g:airline#extensions#vimagit#enabled = 0
 
 
 " TagList & NERDTree
-if (has("win32")) || (has("win64"))
-    let Tlist_Ctags_Cmd = '"D:\GF47_Program_Files\ctags\ctags.exe"'
-endif
+if has("windows")                                                        " 这里也是为了适配windows的ctags
+    if has("win32") || has("win64")                                      " linux下ctags无需配置
+        let Tlist_Ctags_Cmd = '"D:\GF47_Program_Files\ctags\ctags.exe"'  " gvim加载ctags为左边的路径
+    else                                                                 "
+        let Tlist_Ctags_Cmd = '/d/GF47_Program_Files/ctags/ctags'        " git和mingw加载ctags为左边的路径
+    endif                                                                "
+endif                                                                    "
 let Tlist_Show_One_File = 1
 let Tlist_Exit_OnlyWindow = 1
 let Tlist_File_Fold_Auto_Close = 1
