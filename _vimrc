@@ -247,6 +247,11 @@ endfunction
 
 nmap <leader>cg :call AddTitle()<cr> 's
 
+" 系统剪切板交互，wsl的无奈之举
+" paste.exe在windows里是没有的，自己写个控制台程序输出剪切板内容吧- -!最好用win32原生的api，不然大概率有延迟
+vmap <leader><leader>y :'<,'>w !clip.exe<cr><cr>
+nmap <leader><leader>p :read !paste.exe<cr>
+
 
 "--------------------------------------------------------------"
 " vim-plug
