@@ -251,6 +251,93 @@ nmap <leader>cg :call AddTitle()<cr> 's
 " paste.exe在windows里是没有的，自己写个控制台程序输出剪切板内容吧- -!最好用win32原生的api，不然大概率有延迟
 vmap <leader><leader>y :'<,'>w !clip.exe<cr><cr>
 nmap <leader><leader>p :read !paste.exe<cr>
+" C#版本的paste.exe程序
+
+" using System;
+" using System.Runtime.InteropServices;
+" using System.Text;
+" 
+" namespace paste
+" {
+"     class Program
+"     {
+"         static void Main(string[] args)
+"         {
+"             if (args.Length > 0)
+"             {
+"                 if (args[0] == "/?")
+"                 {
+"                     var helpText = new StringBuilder();
+"                     helpText.AppendLine("");
+"                     helpText.AppendLine("paste");
+"                     helpText.AppendLine("");
+"                     helpText.AppendLine("描述:");
+"                     helpText.AppendLine("   输出剪切板字符内容。");
+"                     helpText.AppendLine("");
+"                     helpText.AppendLine("参数列表:");
+"                     helpText.AppendLine("   /?              显示此帮助消息。");
+"                     helpText.AppendLine("   1               ANSI Text");
+"                     helpText.AppendLine("   7               OEM Text");
+"                     helpText.AppendLine("   13              Unicode Text");
+"                     helpText.AppendLine("   16              Local");
+"                     helpText.AppendLine("");
+"                     helpText.AppendLine("示例:");
+"                     helpText.AppendLine("paste > test.txt");
+" 
+"                     Console.Write(helpText.ToString());
+"                     return;
+"                 }
+" 
+"                 if (int.TryParse(args[0], out var format))
+"                 {
+"                     Console.Write(GetText(format));
+"                 }
+"             }
+"             else
+"             {
+"                 Console.Write(GetText(ClipboardFormat.CF_UNICODETEXT));
+"             }
+"         }
+" 
+"         [DllImport("User32")]
+"         internal static extern bool OpenClipboard(IntPtr hWndNewOwner);
+" 
+"         [DllImport("User32")]
+"         internal static extern bool CloseClipboard();
+" 
+"         [DllImport("User32")]
+"         internal static extern bool IsClipboardFormatAvailable(int format);
+" 
+"         [DllImport("User32")]
+"         internal static extern IntPtr GetClipboardData(int uFormat);
+" 
+"         internal static string GetText(int format)
+"         {
+"             var value = string.Empty;
+" 
+"             OpenClipboard(IntPtr.Zero);
+"             if (IsClipboardFormatAvailable(format))
+"             {
+"                 IntPtr ptr = GetClipboardData(format);
+"                 if (ptr != IntPtr.Zero)
+"                 {
+"                     value = Marshal.PtrToStringUni(ptr);
+"                 }
+"             }
+"             CloseClipboard();
+" 
+"             return value;
+"         }
+" 
+"         internal static class ClipboardFormat
+"         {
+"             public const int CF_TEXT = 1;
+"             public const int CF_OEMTEXT = 7;
+"             public const int CF_UNICODETEXT = 13;
+"             public const int CF_LOCALE = 16;
+"         }
+"     }
+" }
 
 
 "--------------------------------------------------------------"
