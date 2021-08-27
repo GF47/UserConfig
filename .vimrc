@@ -497,15 +497,35 @@ let g:NERDSpaceDelims=1
 "--------------------------------------------------------------"
 " coc.vim
 "--------------------------------------------------------------"
+let g:coc_global_extensions=[
+    \ 'coc-snippets',
+    \ 'coc-highlight',
+    \ 'coc-json',
+    \ 'coc-html',
+    \ 'coc-omnisharp',
+    \ 'coc-eslint',
+    \ 'coc-tsserver',
+    \ 'coc-rust-analyzer'
+    \ ]
+
+" if hidden is not set, TextEdit might fail
 set hidden
+" you will have bad experience for diagnostic message when it's default 4000
 set updatetime=300
+" don't giv |ins-completion-menu| message
 set shortmess+=c
+" always show signcolumns
 set signcolumn=yes
 
 " coc的重命名
 nmap <leader>rn <Plug>(coc-rename)
 
 " coc的格式化
+" `:Format`
 command! -nargs=0 Format :call CocAction('format')
+
+" coc的折叠
+" `:Fold`
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
